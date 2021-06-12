@@ -19,7 +19,7 @@ public class Weapon : MonoBehaviour
     {
     }
 
-    // Update is called once per frame
+    // Update is called once per frame aaaa
     void Update()
     {
         if(Input.GetButtonDown("Fire1"))

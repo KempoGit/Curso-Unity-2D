@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviour
 
     public float livingTime = 3f;
 
-    // Start is called before the first frame update
+    // Start is called before the first frame update swwwq
     void Start()
     {
         Destroy(this.gameObject, livingTime);
