@@ -11,6 +11,7 @@ public class Weapon : MonoBehaviour
 
     void Awake()
     {
+        // Esto busca el FirePoint y lo asigna a una variable
         _firePoint = this.transform.Find("FirePoint");
     }
 
