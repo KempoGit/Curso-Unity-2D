@@ -89,15 +89,20 @@ public class EnemyPatrol : MonoBehaviour
         _animator.SetBool("Idle", true);
 
         // Dispara
-        if(_weapon != null)
-        {
-            _weapon.Shoot();
-        }
+        _animator.SetTrigger("Shoot");
 
         // Con esto hacemos que espere el tiempo asignado y vuelva a ejecutar la funcion
         yield return new WaitForSeconds(waitingTime);
 
         // Una vez que llego a su destino y esperó el tiempo deseado, es hora de empezar a patrullar nuevamente
         StartCoroutine("PatrolToTarget");
+    }
+
+    void CanShoot()
+    {
+        if(_weapon != null)
+        {
+            _weapon.Shoot();
+        }
     }
 }

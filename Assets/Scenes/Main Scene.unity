@@ -718,30 +718,6 @@ Transform:
   m_Father: {fileID: 212370511}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &567904328 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6902028932213421811, guid: 23cd823080c2b01448f4ed60d62c3330, type: 3}
-  m_PrefabInstance: {fileID: 6902028932112471587}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &567904332
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 567904328}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e705381267cdaec44b2f9eabf30306be, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &841070903
 GameObject:
   m_ObjectHideFlags: 0
@@ -854,7 +830,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1099081550
 GameObject:
@@ -1385,7 +1361,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6902028932213421808, guid: 23cd823080c2b01448f4ed60d62c3330, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6902028932213421808, guid: 23cd823080c2b01448f4ed60d62c3330, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1399,53 +1375,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6902028932213421809, guid: 23cd823080c2b01448f4ed60d62c3330, type: 3}
-      propertyPath: m_SortingLayerID
-      value: 151399123
-      objectReference: {fileID: 0}
-    - target: {fileID: 6902028932213421809, guid: 23cd823080c2b01448f4ed60d62c3330, type: 3}
-      propertyPath: m_SortingLayer
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6902028932213421809, guid: 23cd823080c2b01448f4ed60d62c3330, type: 3}
-      propertyPath: m_WasSpriteAssigned
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6902028932213421811, guid: 23cd823080c2b01448f4ed60d62c3330, type: 3}
       propertyPath: m_Name
       value: Enemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 8441536661254600981, guid: 23cd823080c2b01448f4ed60d62c3330, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.008180187
-      objectReference: {fileID: 0}
-    - target: {fileID: 8441536661254600981, guid: 23cd823080c2b01448f4ed60d62c3330, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.151
-      objectReference: {fileID: 0}
-    - target: {fileID: 8441536661254600981, guid: 23cd823080c2b01448f4ed60d62c3330, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8441536661254600981, guid: 23cd823080c2b01448f4ed60d62c3330, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8441536661254600981, guid: 23cd823080c2b01448f4ed60d62c3330, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8441536661254600982, guid: 23cd823080c2b01448f4ed60d62c3330, type: 3}
-      propertyPath: m_SortingOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8441536661254600982, guid: 23cd823080c2b01448f4ed60d62c3330, type: 3}
-      propertyPath: m_SortingLayerID
-      value: 151399123
-      objectReference: {fileID: 0}
-    - target: {fileID: 8441536661254600982, guid: 23cd823080c2b01448f4ed60d62c3330, type: 3}
-      propertyPath: m_SortingLayer
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 23cd823080c2b01448f4ed60d62c3330, type: 3}
