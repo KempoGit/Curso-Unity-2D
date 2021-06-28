@@ -10,6 +10,15 @@ public class EnemyPatrol : MonoBehaviour
     public float waitingTime = 2f;
 
     private GameObject _target;
+    private Animator _animator;
+    private Weapon _weapon;
+
+    private void Awake()
+    {
+        _animator = GetComponent<Animator>();
+        _weapon = GetComponentInChildren<Weapon>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -59,18 +68,36 @@ public class EnemyPatrol : MonoBehaviour
         // Si la distancia entre el enemigo y el target es mayor a 0.05f, se mueve hacia el
         while(Vector2.Distance(this.transform.position, _target.transform.position) > 0.005f)
         {
+            // Actualiza el animator
+            _animator.SetBool("Idle", false);
+
+            // Aca setea la direccion a la que tiene que moverse y se translada hacia la direccion por la velocidad.
             Vector2 direction = _target.transform.position - this.transform.position;
             this.transform.Translate(direction.normalized * speed * Time.deltaTime);
+
             // El 'yield return null' sirve para salir de la funcion y se vuelva a ejecutar
             yield return null;
         }
+
         // Aca llega al target y lo posicionamos en la posicion X del target
         this.transform.position = new Vector2(_target.transform.position.x, this.transform.position.y);
+
+        // Una vez que llego a su destino es hora de actualizar el objetivo
+        UpdateTarget();
+
+        // Actualiza el animator
+        _animator.SetBool("Idle", true);
+
+        // Dispara
+        if(_weapon != null)
+        {
+            _weapon.Shoot();
+        }
+
         // Con esto hacemos que espere el tiempo asignado y vuelva a ejecutar la funcion
         yield return new WaitForSeconds(waitingTime);
 
-        // Una vez que llego a su destino y esperó el tiempo deseado, es hora de actualizar el objetivo y empezar a patrullar nuevamente
-        UpdateTarget();
+        // Una vez que llego a su destino y esperó el tiempo deseado, es hora de empezar a patrullar nuevamente
         StartCoroutine("PatrolToTarget");
     }
 }

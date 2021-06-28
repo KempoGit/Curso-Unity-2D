@@ -35,7 +35,7 @@ public class Weapon : MonoBehaviour
         //}
     }
 
-    void Shoot()
+    public void Shoot()
     {
         if(bulletPrefab != null && _firePoint != null && shooter != null)
         {
