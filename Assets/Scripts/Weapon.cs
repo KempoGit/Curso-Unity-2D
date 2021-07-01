@@ -9,6 +9,9 @@ public class Weapon : MonoBehaviour
     private Transform _firePoint;
     public GameObject shooter;
 
+    public GameObject explosionEffect;
+    public LineRenderer lineRenderer;
+
     void Awake()
     {
         // Esto busca el FirePoint y lo asigna a una variable
@@ -48,6 +51,43 @@ public class Weapon : MonoBehaviour
             {
                 bulletComponent.direction = Vector2.right;
             }
+        }
+    }
+
+    public IEnumerator ShootWithRayCast()
+    {
+        if(explosionEffect != null && lineRenderer != null)
+        {
+            // Dice de donde sale y Raycast y en que direccion
+            RaycastHit2D hitInfo = Physics2D.Raycast(_firePoint.position, _firePoint.right);
+
+            if(hitInfo)
+            {
+                // Codigo de ejemplo
+                //(hitInfo.collider.tag == "Player") {
+                //    Transform player = hitInfo.transform;
+                //    player.GetComponent<PlayerHealth>().ApplyDamage(5);
+                //}
+
+                // Instancia la explosion en el punto que colisiona
+                Instantiate(explosionEffect, hitInfo.point, Quaternion.identity);
+
+                // Luego setea el lineRenderer
+                lineRenderer.SetPosition(0, _firePoint.position);
+                lineRenderer.SetPosition(1, hitInfo.point);
+            } else {
+                lineRenderer.SetPosition(0, _firePoint.position);
+                lineRenderer.SetPosition(1, hitInfo.point + Vector2.right * 100);
+            }
+
+            // Muestro el componente lineRenderer
+            lineRenderer.enabled = true;
+
+            // Espero 0.1 segundos para que se vea el lineRenderer
+            yield return new WaitForSeconds(0.1f);
+
+            // Y cuando vuelve a la funcion lo desactivo
+            lineRenderer.enabled = false;
         }
     }
 }
