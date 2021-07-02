@@ -22,14 +22,21 @@ public class EnemyPatrol : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        UpdateTarget();
-        StartCoroutine("PatrolToTarget");
+        //UpdateTarget();
+        //StartCoroutine("PatrolToTarget");
+
+        // Setea la animacion Idle en el primer frame
+        _animator.SetBool("Idle", true);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        // Cuando presiona el click activa la animacion de disparo
+        if (Input.GetButtonDown("Fire1"))
+        {
+            _animator.SetTrigger("Shoot");
+        }
     }
 
     // Esta funcion sirve para crear el target del enemigo y que mire en la direccion del target
@@ -102,7 +109,8 @@ public class EnemyPatrol : MonoBehaviour
     {
         if(_weapon != null)
         {
-            _weapon.Shoot();
+            // Dispara la Coroutine del arma
+            StartCoroutine(_weapon.ShootWithRayCast());
         }
     }
 }
