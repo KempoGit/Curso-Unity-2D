@@ -18,18 +18,24 @@ public class Weapon : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Invoke("Shoot", 1f);
+        //Invoke("Shoot", 2f);
+        //Invoke("Shoot", 3f);
+        //Invoke("Shoot", 4f);
+        //Invoke("Shoot", 5f);
+        //Invoke("Shoot", 6f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetButtonDown("Fire1"))
-        {
-            Shoot();
-        }
+        //if(Input.GetButtonDown("Fire1"))
+        //{
+        //    Shoot();
+        //}
     }
 
-    void Shoot()
+    public void Shoot()
     {
         if(bulletPrefab != null && _firePoint != null && shooter != null)
         {
