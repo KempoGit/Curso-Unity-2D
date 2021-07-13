@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 125137439}
   - component: {fileID: 125137438}
   m_Layer: 10
-  m_Name: Enemy
+  m_Name: Strong Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -109,7 +109,7 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: -149580961759692246, guid: d9a0db1e5768ded48b4da49bc8059ca2, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.6320754, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -131,7 +131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bef5b7c2315aa54d978a88ec6b82af0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1.5
+  speed: 2
   minX: -2.515
   maxX: 2.48
   waitingTime: 2
@@ -239,10 +239,26 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1048718628975955880, guid: 69bcc08c9fd0172488d18eef5b141842, type: 3}
+      propertyPath: m_Color.r
+      value: 0.745283
+      objectReference: {fileID: 0}
+    - target: {fileID: 1048718628975955880, guid: 69bcc08c9fd0172488d18eef5b141842, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1048718628975955880, guid: 69bcc08c9fd0172488d18eef5b141842, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1048718628975955881, guid: 69bcc08c9fd0172488d18eef5b141842, type: 3}
       propertyPath: shooter
       value: 
       objectReference: {fileID: 6902028932213421811}
+    - target: {fileID: 1048718628975955881, guid: 69bcc08c9fd0172488d18eef5b141842, type: 3}
+      propertyPath: bulletPrefab
+      value: 
+      objectReference: {fileID: 4592018085503696977, guid: c8694971fb5b0334da3be91a5ae057ce, type: 3}
     - target: {fileID: 1048718628975955883, guid: 69bcc08c9fd0172488d18eef5b141842, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.151
