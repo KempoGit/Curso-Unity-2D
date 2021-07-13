@@ -97,6 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 815a626c65259d749808142bb06d0c02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 1
   speed: 3.5
   direction: {x: 0, y: 0}
   initialColor: {r: 1, g: 1, b: 1, a: 1}

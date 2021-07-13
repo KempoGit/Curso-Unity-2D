@@ -121,6 +121,11 @@ public class EnemyPatrol : MonoBehaviour
             _horizontalVelocity = _horizontalVelocity * -1f;
         }
 
+        if(_isAttacking)
+        {
+            _horizontalVelocity = 0f;
+        }
+
         // Aplico la velocidad al rigidbody
         _rigidbody.velocity = new Vector2(_horizontalVelocity, _rigidbody.velocity.y);
     }
@@ -129,16 +134,12 @@ public class EnemyPatrol : MonoBehaviour
     {
         if (Physics2D.Raycast(transform.position, _direction, playerAware, playerLayer))
         {
-            StartCoroutine(AimAndShoot());
+            StartCoroutine("AimAndShoot");
         }
     }
 
     private IEnumerator AimAndShoot()
     {
-        float speedBackup = speed;
-
-        speed = 0f;
-
         _isAttacking = true;
 
         yield return new WaitForSeconds(aimingTime);
@@ -148,8 +149,6 @@ public class EnemyPatrol : MonoBehaviour
         yield return new WaitForSeconds(shootingTime);
 
         _isAttacking = false;
-
-        speed = speedBackup;
     }
 
     void CanShoot()
@@ -158,5 +157,16 @@ public class EnemyPatrol : MonoBehaviour
         {
             _weapon.Shoot();
         }
+    }
+
+    private void OnEnable()
+    {
+        _isAttacking = false;
+    }
+
+    private void OnDisable()
+    {
+        StopCoroutine("AimAndShoot");
+        _isAttacking = false;
     }
 }

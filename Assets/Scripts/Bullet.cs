@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    public int damage = 1;
     public float speed = 2f;
     public Vector2 direction;
     public Color initialColor = Color.white;
@@ -53,7 +54,10 @@ public class Bullet : MonoBehaviour
     {
         if(collision.CompareTag("Player"))
         {
-            Debug.Log("Encontre al player");
+            // Busca en la colision dicha funcion
+            // Con "collision.SendMessage" busca la funcion en el objeto colisionado
+            // Con "collision.SendMessageUpwards" busca la funcion en el objeto colisionado, luego en su objeto padre y asi
+            collision.SendMessageUpwards("AddDamage", damage);
             Destroy(this.gameObject);
         }
     }
