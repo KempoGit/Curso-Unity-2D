@@ -9,93 +9,146 @@ public class EnemyPatrol : MonoBehaviour
     public float maxX;
     public float waitingTime = 2f;
 
+    public LayerMask groundLayer;
+    public LayerMask playerLayer;
+    public float wallAware = 0.5f;
+    public float playerAware = 3f;
+    public float aimingTime= 0.5f;
+    public float shootingTime= 1.5f;
+
+    private bool _facingRight;
+    private Vector2 _direction;
+    private float _horizontalVelocity;
+    private bool _isAttacking;
+
     private GameObject _target;
     private Animator _animator;
     private Weapon _weapon;
+    private Rigidbody2D _rigidbody;
 
     private void Awake()
     {
         _animator = GetComponent<Animator>();
         _weapon = GetComponentInChildren<Weapon>();
+        _rigidbody = GetComponent<Rigidbody2D>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        UpdateTarget();
-        StartCoroutine("PatrolToTarget");
+        // Setea para donde esta mirando el enemigo
+        setFacing();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-    }
-
-    // Esta funcion sirve para crear el target del enemigo y que mire en la direccion del target
-    private void UpdateTarget()
-    {
-        // Si es la primera vez, crea el target a la izquierda
-        if(_target == null)
+        // Raycast para ver en que momento gira
+        if(!_isAttacking)
         {
-            _target = new GameObject("Target");
-            _target.transform.position = new Vector2(minX, this.transform.position.y);
-            // Pone este objeto mirando hacia atras con el Vector3
-            this.transform.localScale = new Vector3(-1, 1, 1);
-            // Y el return para que no ejecute el resto de la funcion
-            return;
+            FlipRaycast();
         }
 
-        // Si esta en la izquierda, crea el target a la derecha
-        if(_target.transform.position.x == minX)
+        // Raycast para saber cuando disparar
+        if(!_isAttacking)
         {
-            _target.transform.position = new Vector2(maxX, this.transform.position.y);
-            // Pone este objeto mirando hacia adelante con el Vector3
-            this.transform.localScale = new Vector3(1, 1, 1);
-        }
-        // Si esta en la derecha, crea el target a la izquierda
-        else if(_target.transform.position.x == maxX)
-        {
-            _target.transform.position = new Vector2(minX, this.transform.position.y);
-            // Pone este objeto mirando hacia atras con el Vector3
-            this.transform.localScale = new Vector3(-1, 1, 1);
+            ShootRaycast();
         }
     }
 
-    // Esta funcion sirve para mover el enemigo hasta el target
-    private IEnumerator PatrolToTarget()
+    private void FixedUpdate()
     {
-        // Si la distancia entre el enemigo y el target es mayor a 0.05f, se mueve hacia el
-        while(Vector2.Distance(this.transform.position, _target.transform.position) > 0.005f)
+        // Aplica movimiento
+        Move();
+    }
+
+    private void LateUpdate()
+    {
+        _animator.SetBool("Idle", _rigidbody.velocity == Vector2.zero);
+    }
+
+    private void setFacing()
+    {
+        if(transform.localScale.x > 0f)
         {
-            // Actualiza el animator
-            _animator.SetBool("Idle", false);
+            _facingRight = true;
+            _direction = Vector2.right;
+        } else if (transform.localScale.x < 0f)
+        {
+            _facingRight = false;
+            _direction = Vector2.left;
+        }
+    }
 
-            // Aca setea la direccion a la que tiene que moverse y se translada hacia la direccion por la velocidad.
-            Vector2 direction = _target.transform.position - this.transform.position;
-            this.transform.Translate(direction.normalized * speed * Time.deltaTime);
+    private void FlipRaycast()
+    {
+        // Creo un raycast desde mi posicion
+        // hacia una direccion,
+        // seteo la distancia
+        // y el tipo de layer que deseo que detectar
+        if(Physics2D.Raycast(transform.position, _direction, wallAware, groundLayer))
+        {
+            Flip();
+        }
+    }
 
-            // El 'yield return null' sirve para salir de la funcion y se vuelva a ejecutar
-            yield return null;
+    private void Flip()
+    {
+        _facingRight = !_facingRight;
+        float localScaleX = this.transform.localScale.x;
+        // Da vuelta el valor del scale X
+        localScaleX = localScaleX * -1f;
+        // Y lo asigna
+        this.transform.localScale = new Vector3(localScaleX, this.transform.localScale.y, this.transform.localScale.z);
+        // Asigna la direccion en un vector2
+        if(_facingRight)
+        {
+            _direction = Vector2.right;
+        } else
+        {
+            _direction = Vector2.left;
+        }
+    }
+
+    private void Move()
+    {
+        // Asigno la velocidad
+        _horizontalVelocity = speed;
+
+        // Si mira a la derecha la transformo en negativa
+        if(!_facingRight)
+        {
+            _horizontalVelocity = _horizontalVelocity * -1f;
         }
 
-        // Aca llega al target y lo posicionamos en la posicion X del target
-        this.transform.position = new Vector2(_target.transform.position.x, this.transform.position.y);
+        if(_isAttacking)
+        {
+            _horizontalVelocity = 0f;
+        }
 
-        // Una vez que llego a su destino es hora de actualizar el objetivo
-        UpdateTarget();
+        // Aplico la velocidad al rigidbody
+        _rigidbody.velocity = new Vector2(_horizontalVelocity, _rigidbody.velocity.y);
+    }
 
-        // Actualiza el animator
-        _animator.SetBool("Idle", true);
+    private void ShootRaycast()
+    {
+        if (Physics2D.Raycast(transform.position, _direction, playerAware, playerLayer))
+        {
+            StartCoroutine("AimAndShoot");
+        }
+    }
 
-        // Dispara
+    private IEnumerator AimAndShoot()
+    {
+        _isAttacking = true;
+
+        yield return new WaitForSeconds(aimingTime);
+
         _animator.SetTrigger("Shoot");
 
-        // Con esto hacemos que espere el tiempo asignado y vuelva a ejecutar la funcion
-        yield return new WaitForSeconds(waitingTime);
+        yield return new WaitForSeconds(shootingTime);
 
-        // Una vez que llego a su destino y esperó el tiempo deseado, es hora de empezar a patrullar nuevamente
-        StartCoroutine("PatrolToTarget");
+        _isAttacking = false;
     }
 
     void CanShoot()
@@ -104,5 +157,16 @@ public class EnemyPatrol : MonoBehaviour
         {
             _weapon.Shoot();
         }
+    }
+
+    private void OnEnable()
+    {
+        _isAttacking = false;
+    }
+
+    private void OnDisable()
+    {
+        StopCoroutine("AimAndShoot");
+        _isAttacking = false;
     }
 }

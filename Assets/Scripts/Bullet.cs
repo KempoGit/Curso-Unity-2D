@@ -4,22 +4,61 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    public int damage = 1;
     public float speed = 2f;
     public Vector2 direction;
+    public Color initialColor = Color.white;
+    public Color finalColor;
 
     public float livingTime = 3f;
+
+    private SpriteRenderer _renderer;
+    private float _startingTime;
+
+    private Rigidbody2D _rigidbody;
+
+    private void Awake()
+    {
+        _renderer = GetComponent<SpriteRenderer>();
+        _rigidbody = GetComponent<Rigidbody2D>();
+    }
 
     // Start is called before the first frame update 
     void Start()
     {
+        // Guarda el tiempo inicial
+        _startingTime = Time.time;
+
+        // Destruye la bala despues del tiempo de vida
         Destroy(this.gameObject, livingTime);
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector2 movement = direction.normalized * speed * Time.deltaTime;
-        // transform.position = new Vector2(transform.position.x + movement.x, transform.position.y + movement.y);
-        transform.Translate(movement);
+        // Cambia el color de la bala con el tiempo
+        float _timeSinceStarted = Time.time - _startingTime;
+        float _percentageCompleted = _timeSinceStarted / livingTime;
+
+        _renderer.color = Color.Lerp(initialColor, finalColor, _percentageCompleted);
+    }
+
+    private void FixedUpdate()
+    {
+        // Mover el objeto
+        Vector2 movement = direction.normalized * speed;
+        _rigidbody.velocity = movement;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Player"))
+        {
+            // Busca en la colision dicha funcion
+            // Con "collision.SendMessage" busca la funcion en el objeto colisionado
+            // Con "collision.SendMessageUpwards" busca la funcion en el objeto colisionado, luego en su objeto padre y asi
+            collision.SendMessageUpwards("AddDamage", damage);
+            Destroy(this.gameObject);
+        }
     }
 }
