@@ -16,6 +16,9 @@ public class PlayerController : MonoBehaviour
     private Animator _animator;
 
     private float _longIdleTimer;
+    private int _jumpCount;
+    private int _jumpMax = 2;
+    private float _jumpStartingTime;
 
     private Vector2 _movement;
     private bool _facingRight = true;
@@ -58,10 +61,19 @@ public class PlayerController : MonoBehaviour
         // Esta en el piso?
         _isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
-        // Esta saltando?
-        if(Input.GetButtonDown("Jump") && _isGrounded == true && _isAttacking == false)
+        // Esta saltando? Salto 1 o menos veces?
+        if(Input.GetButtonDown("Jump") && (_isGrounded == true || _jumpCount < _jumpMax) && _isAttacking == false)
         {
+            // Agrega un salto al contador
+            _jumpCount = _jumpCount + 1;
+            _jumpStartingTime = Time.time;
+            _rigidbody.velocity = Vector2.zero;
             _rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        } else if(_isGrounded == true && (Time.time - _jumpStartingTime) > 0.1f)
+        {
+            // Seteo un tiempo desde que presiona el salto, para que al player no se le reinicie el salto antes de dejar el suelo
+            // Si esta en tierra reinicia el contador
+            _jumpCount = 0;
         }
 
         // Quiere pegar

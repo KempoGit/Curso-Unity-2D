@@ -25,12 +25,14 @@ public class EnemyPatrol : MonoBehaviour
     private Animator _animator;
     private Weapon _weapon;
     private Rigidbody2D _rigidbody;
+    private AudioSource _audio;
 
     private void Awake()
     {
         _animator = GetComponent<Animator>();
         _weapon = GetComponentInChildren<Weapon>();
         _rigidbody = GetComponent<Rigidbody2D>();
+        _audio = GetComponent<AudioSource>();
     }
 
     // Start is called before the first frame update
@@ -156,6 +158,8 @@ public class EnemyPatrol : MonoBehaviour
         if(_weapon != null)
         {
             _weapon.Shoot();
+            // Con esta funcion le damos play al audio del enemigo
+            //_audio.Play();
         }
     }
 
