@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D _rigidbody;
     private Animator _animator;
+    private SpriteRenderer _renderer;
 
     private float _longIdleTimer;
     private int _jumpCount;
@@ -25,10 +26,17 @@ public class PlayerController : MonoBehaviour
     private bool _isGrounded;
     private bool _isAttacking;
 
+    private float _initialPositionX;
+    private float _initialPositionY;
+
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
+        _renderer = GetComponent<SpriteRenderer>();
+
+        _initialPositionX = this.transform.position.x;
+        _initialPositionY = this.transform.position.y;
     }
 
     // Start is called before the first frame update
@@ -142,5 +150,11 @@ public class PlayerController : MonoBehaviour
         localScaleX = localScaleX * -1f;
         // Y lo asigna
         this.transform.localScale = new Vector3(localScaleX, this.transform.localScale.y, this.transform.localScale.z);
+    }
+
+    private void OnEnable()
+    {
+        _renderer.color = Color.white;
+        this.transform.position = new Vector2(_initialPositionX, _initialPositionY);
     }
 }

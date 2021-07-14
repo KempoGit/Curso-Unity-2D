@@ -166,11 +166,13 @@ public class EnemyPatrol : MonoBehaviour
     private void OnEnable()
     {
         _isAttacking = false;
+        _animator.gameObject.SetActive(true);
     }
 
     private void OnDisable()
     {
         StopCoroutine("AimAndShoot");
         _isAttacking = false;
+        _animator.gameObject.SetActive(false);
     }
 }
