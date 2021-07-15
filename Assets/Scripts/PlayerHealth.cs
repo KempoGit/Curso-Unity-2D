@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class PlayerHealth : MonoBehaviour
 {
     public int totalHealth = 3;
+    public int heartsRecoveryTime = 30;
     // Aca ponemos el Health que esta en el HUD Menu
     public RectTransform heartUI;
 
@@ -14,6 +15,7 @@ public class PlayerHealth : MonoBehaviour
     public RectTransform gameOverMenu;
     public GameObject hordes;
     public GameObject player;
+    public Transform corazones;
 
     private int health;
     // Tamaño del corazon en pixeles
@@ -30,8 +32,8 @@ public class PlayerHealth : MonoBehaviour
     void Start()
     {
         health = totalHealth;
+        InvokeRepeating("ReactivarCorazones", 0f, heartsRecoveryTime);
     }
-
 
     public void AddDamage(int amount)
     {
@@ -76,14 +78,27 @@ public class PlayerHealth : MonoBehaviour
 
         _renderer.color = Color.white;
     }
-    private void GameOver()
+    public void GameOver()
     {
         gameOverMenu.gameObject.SetActive(true);
         hordes.gameObject.SetActive(false);
         player.gameObject.SetActive(false);
 
+        ReactivarCorazones();
+
         // Se desactiva a si mismo
         gameObject.SetActive(false);
+    }
+
+    public void ReactivarCorazones()
+    {
+        for (int i = 0; i < corazones.childCount; i++)
+        {
+            if (!corazones.GetChild(i).gameObject.activeSelf)
+            {
+                corazones.GetChild(i).gameObject.SetActive(true);
+            }
+        }
     }
 
     private void OnEnable()
