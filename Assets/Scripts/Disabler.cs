@@ -11,7 +11,7 @@ public class Disabler : MonoBehaviour
             collision.SendMessageUpwards("GameOver");
         } else
         {
-            collision.gameObject.SetActive(false);
+            Destroy(collision.gameObject);
         }
     }
 }

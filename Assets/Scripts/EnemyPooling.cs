@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyPooling : MonoBehaviour
 {
     public GameObject prefab;
-    public int amount = 10;
+    public float delay = 1f;
     public int instantiateGap = 5;
 
     // Start is called before the first frame update
@@ -18,8 +18,16 @@ public class EnemyPooling : MonoBehaviour
         // La primera vez se llama con un delay de "1f" segundos
         // Y despues se invoca cada cierto tiempo (instantiateGap)
         // InvokeRepeating("GetEnemyFromPool", 1f, instantiateGap);
+    }
 
-        InvokeRepeating("GenerateEnemy", 1f, instantiateGap);
+    private void OnEnable()
+    {
+        InvokeRepeating("GenerateEnemy", delay, instantiateGap);
+    }
+
+    private void OnDisable()
+    {
+        CancelInvoke("GenerateEnemy");
     }
 
     private GameObject GenerateEnemy()
@@ -72,10 +80,4 @@ public class EnemyPooling : MonoBehaviour
     //    enemy.SetActive(true);
     //    return enemy;
     //}
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
