@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundLayer;
     public float groundCheckRadius;
 
+    public Joystick joystick;
+
     private Rigidbody2D _rigidbody;
     private Animator _animator;
     private SpriteRenderer _renderer;
@@ -52,8 +54,15 @@ public class PlayerController : MonoBehaviour
         if (_isAttacking == false)
         {
             // Setea hacia donde tiene que moverse
-            // El GetAxisRaw redondea el valor del axis para sacarle la gravedad y que reacciones instantaneamente al input
-            float horizontalInput = Input.GetAxisRaw("Horizontal");
+            float horizontalInput;
+            if(joystick.gameObject.activeInHierarchy)
+            {
+                horizontalInput = joystick.Horizontal;
+            } else
+            {
+                horizontalInput = Input.GetAxisRaw("Horizontal");
+            }
+
             _movement = new Vector2(horizontalInput, 0f);
 
             // Da vuelta el personaje
@@ -64,32 +73,27 @@ public class PlayerController : MonoBehaviour
             {
                 Flip();
             }
+
         }
 
         // Esta en el piso?
         _isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
-        // Esta saltando? Salto 1 o menos veces?
-        if(Input.GetButtonDown("Jump") && (_isGrounded == true || _jumpCount < _jumpMax) && _isAttacking == false)
+        // Seteo un tiempo desde que presiona el salto, para que al player no se le reinicie el salto antes de dejar el suelo
+        // Si esta en tierra reinicia el contador de saltos
+        if (_isGrounded == true && (Time.time - _jumpStartingTime) > 0.1f)
         {
-            // Agrega un salto al contador
-            _jumpCount = _jumpCount + 1;
-            _jumpStartingTime = Time.time;
-            _rigidbody.velocity = Vector2.zero;
-            _rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-        } else if(_isGrounded == true && (Time.time - _jumpStartingTime) > 0.1f)
-        {
-            // Seteo un tiempo desde que presiona el salto, para que al player no se le reinicie el salto antes de dejar el suelo
-            // Si esta en tierra reinicia el contador
             _jumpCount = 0;
         }
 
-        // Quiere pegar
-        if(Input.GetButtonDown("Fire1") && _isGrounded == true && _isAttacking == false)
+        if (Input.GetButtonDown("Fire1"))
         {
-            _movement = Vector2.zero;
-            _rigidbody.velocity = Vector2.zero;
-            _animator.SetTrigger("Attack");
+            onAttack();
+        }
+
+        if (Input.GetButtonDown("Jump"))
+        {
+            onJump();
         }
     }
 
@@ -150,6 +154,30 @@ public class PlayerController : MonoBehaviour
         localScaleX = localScaleX * -1f;
         // Y lo asigna
         this.transform.localScale = new Vector3(localScaleX, this.transform.localScale.y, this.transform.localScale.z);
+    }
+
+    public void onAttack()
+    {
+        // Quiere pegar
+        if (_isGrounded == true && _isAttacking == false)
+        {
+            _movement = Vector2.zero;
+            _rigidbody.velocity = Vector2.zero;
+            _animator.SetTrigger("Attack");
+        }
+    }
+
+    public void onJump()
+    {
+        // Esta saltando? Salto 1 o menos veces?
+        if ((_isGrounded == true || _jumpCount < _jumpMax) && _isAttacking == false)
+        {
+            // Agrega un salto al contador
+            _jumpCount = _jumpCount + 1;
+            _jumpStartingTime = Time.time;
+            _rigidbody.velocity = Vector2.zero;
+            _rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        }
     }
 
     private void OnEnable()
