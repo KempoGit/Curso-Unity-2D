@@ -10,6 +10,7 @@ public class PlayerHealth : MonoBehaviour
     public int heartsRecoveryTime = 30;
     // Aca ponemos el Health que esta en el HUD Menu
     public RectTransform heartUI;
+    private float timeInmunity = 10f;
 
     // Game Over
     public RectTransform gameOverMenu;
@@ -20,6 +21,9 @@ public class PlayerHealth : MonoBehaviour
     private int health;
     // Tamaño del corazon en pixeles
     private float heartSize = 16f;
+    // Para ser invencible
+    private bool _invincible = false;
+    private float _startInmunity;
 
     private SpriteRenderer _renderer;
 
@@ -37,10 +41,13 @@ public class PlayerHealth : MonoBehaviour
 
     public void AddDamage(int amount)
     {
-        health = health - amount;
+        if(!_invincible)
+        {
+            health = health - amount;
 
-        // Feedback visual
-        StartCoroutine("VisualFeedback");
+            // Feedback visual
+            StartCoroutine("VisualFeedback");
+        }
 
         // Game Over
         if(health <= 0)
@@ -98,6 +105,33 @@ public class PlayerHealth : MonoBehaviour
             {
                 corazones.GetChild(i).gameObject.SetActive(true);
             }
+        }
+    }
+
+    public void Invincible()
+    {
+        _invincible = true;
+        _startInmunity = Time.time;
+        StartCoroutine("VisualInvincible");
+    }
+
+    private IEnumerator VisualInvincible()
+    {
+        _renderer.color = Color.yellow;
+
+        yield return new WaitForSeconds(0.05f * (timeInmunity - (Time.time - _startInmunity)));
+
+        _renderer.color = Color.white;
+
+        yield return new WaitForSeconds(0.05f * (timeInmunity - (Time.time - _startInmunity)));
+
+        if (Time.time - _startInmunity <= timeInmunity)
+        {
+            StartCoroutine("VisualInvincible");
+        } else
+        {
+            _invincible = false;
+            StopCoroutine("VisualInvincible");
         }
     }
 
