@@ -23,13 +23,14 @@ public class PoolWithParticles : MonoBehaviour
 
     private GameObject GeneratePrefab()
     {
-        GameObject enemy = Instantiate(prefab, this.transform.position, Quaternion.identity, this.transform);
-        return enemy;
+        GameObject patos = Instantiate(prefab, this.transform.position, Quaternion.identity, this.transform);
+        return patos;
     }
 
     private GameObject GenerateParticle()
     {
-        GameObject enemy = Instantiate(particlesPrefab, this.transform.position, Quaternion.identity, this.transform);
-        return enemy;
+        GameObject particulas = Instantiate(particlesPrefab, this.transform.position, Quaternion.identity, this.transform);
+        Destroy(particulas, 1);
+        return particulas;
     }
 }
